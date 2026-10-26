@@ -39,7 +39,7 @@
   }
 
   window.LPVT_COMPONENTS_READY = Promise.all([
-    load('[data-site-component="header"]', "/components/header.html"),
+    load('[data-site-component="header"]', "./components/header.html"),
     load('[data-site-component="footer"]', "/components/footer.html")
   ]).then(setActiveNavigation);
 })();
