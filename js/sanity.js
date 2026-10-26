@@ -6,6 +6,7 @@
 (function () {
   "use strict";
   var S = (window.LPVT_CONFIG || {}).sanity || {};
+  var assetUrl = window.LPVT_ASSET_URL || function (path) { return path; };
   var API = "https://" + S.projectId + ".apicdn.sanity.io/v" + (S.apiVersion || "2021-10-21") + "/data/query/" + S.dataset;
 
   /* ---------- helpers ---------- */
@@ -110,7 +111,7 @@
   }
   function tagPill(t) { return '<a class="tag-pill" href="/blog/?tag=' + encodeURIComponent(t) + '">' + esc(t) + "</a>"; }
   function card(href, image, title, text, foot) {
-    return '<div class="col-md-6 col-xl-4"><article class="blog-card bg-white"><a href="' + href + '" class="blog-thumb text-decoration-none" style="background-image:url(\'' + esc(img(image, 700) || "/images/logo.png") + '\')" aria-label="' + esc(title) + '"></a>' +
+    return '<div class="col-md-6 col-xl-4"><article class="blog-card bg-white"><a href="' + href + '" class="blog-thumb text-decoration-none" style="background-image:url(\'' + esc(img(image, 700) || assetUrl("images/logo.png")) + '\')" aria-label="' + esc(title) + '"></a>' +
       '<div class="p-4 d-flex flex-column flex-grow-1"><h2 class="h5 fw-bold"><a class="text-decoration-none" style="color:var(--dark-blue)" href="' + href + '">' + esc(title) + "</a></h2>" +
       '<p class="lead-text">' + esc(text) + '</p><div class="mt-auto small">' + (foot || "") + "</div></div></article></div>";
   }
@@ -154,7 +155,7 @@
       var pages = Math.max(1, Math.ceil(list.length / per)); page = Math.min(page, pages);
       grid.innerHTML = list.slice((page - 1) * per, page * per).map(function (a) {
         var href = "/blog/post/?slug=" + encodeURIComponent(a.slug);
-        var image = img(a.image || "/images/blog/" + a.slug + ".jpg", 800) || "/images/logo.png";
+        var image = img(a.image || assetUrl("images/blog/" + a.slug + ".jpg"), 800) || assetUrl("images/logo.png");
         return '<article class="bc" data-article>' +
           '<a class="bc-img" href="' + href + '" style="background-image:url(\'' + esc(image) + '\')" aria-label="' + esc(a.name) + '"></a>' +
           '<div class="bc-body"><h2 class="bc-title"><a href="' + href + '">' + esc(a.name) + "</a></h2>" +
@@ -233,7 +234,7 @@
   var DATASHEET = "https://drive.google.com/file/d/1pHjF3pxfr-FQ8QPHPbX-n1LHjY2Ls0HO/view?usp=sharing";
   function ppHtml(d) {
     var im = d.image && (d.image.url || d.image); im = typeof im === "string" ? im : "";
-    var hero = im ? img(im, 1920) : "/images/Product-Page-Cover.jpg";
+    var hero = im ? img(im, 1920) : assetUrl("images/Product-Page-Cover.jpg");
     var cards = (d.sub_products || []).map(function (c) {
       return '<div class="pp-card"><span class="pp-card-icon"><i class="bi bi-gear-wide-connected"></i></span><h6>' + esc(c.title) + "</h6><article>" + portable(c.description) + "</article></div>";
     }).join("");

@@ -1,4 +1,9 @@
 // Public EmailJS keys (these are meant to be exposed in the browser).
+window.LPVT_SITE_ROOT = new URL("../", document.currentScript.src);
+window.LPVT_ASSET_URL = function (path) {
+  return new URL(String(path).replace(/^\/+/, ""), window.LPVT_SITE_ROOT).href;
+};
+
 window.LPVT_CONFIG = {
   // Public Sanity project info (safe to expose; dataset must be public-read).
   sanity: { projectId: "ca3qbr31", dataset: "production", apiVersion: "2021-10-21" },
