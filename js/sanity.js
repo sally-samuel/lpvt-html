@@ -96,12 +96,6 @@
         '<div id="' + id + "-" + i + '" class="accordion-collapse collapse' + (i ? "" : " show") + '" data-bs-parent="#' + id + '"><div class="accordion-body">' + it.html + "</div></div></div>";
     }).join("") + "</div>";
   }
-  function faqAnswer(answer) {
-    var html = portable(answer);
-    var text = html.replace(/<[^>]*>/g, "").replace(/&nbsp;|&#160;/gi, " ").trim();
-    if (text || /<img\b/i.test(html)) return html;
-    return "";
-  }
   function notFound(box, what) {
     box.innerHTML = '<div class="text-center py-5"><h2 class="h4">' + what + ' not found</h2><p class="lead-text">It may have been moved or removed.</p><a class="btn btn-green" href="/">Back to home</a></div>';
   }
@@ -134,11 +128,10 @@
 
   R.faq = function (box) {
     return fetchQuery(Q.faqs).then(function (rows) {
-      rows = (rows || []).map(function (r) { return { question: r.question, answer: faqAnswer(r.answer) }; })
-        .filter(function (r) { return r.question && r.answer; });
+      rows = (rows || []).filter(function (r) { return r.question; });
       if (!rows.length) return;
       var limit = parseInt(box.getAttribute("data-limit"), 10) || 999;
-      box.innerHTML = accordion("faqS", rows.slice(0, limit).map(function (r) { return { title: r.question, html: r.answer }; }));
+      box.innerHTML = accordion("faqS", rows.slice(0, limit).map(function (r) { return { title: r.question, html: portable(r.answer) }; }));
     });
   };
 
@@ -285,13 +278,11 @@
     draw();
   }
   R["faq-cards"] = function (box) {
-    var local = (window.LPVT_FAQS || []).filter(function (f) { return f.q && f.a && f.a.trim(); })
-      .map(function (f) { return { q: f.q, html: "<p>" + esc(f.a) + "</p>" }; });
+    var local = (window.LPVT_FAQS || []).map(function (f) { return { q: f.q, html: f.a ? "<p>" + esc(f.a) + "</p>" : "" }; });
     if (local.length) faqCards(box, local);
     return fetchQuery(Q.faqs).then(function (rows) {
-      rows = (rows || []).map(function (r) { return { q: r.question, html: faqAnswer(r.answer) }; })
-        .filter(function (r) { return r.q && r.html; });
-      if (rows.length) faqCards(box, rows);
+      rows = (rows || []).filter(function (r) { return r.question; });
+      if (rows.length) faqCards(box, rows.map(function (r) { return { q: r.question, html: portable(r.answer) }; }));
     });
   };
 
