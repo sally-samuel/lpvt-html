@@ -173,7 +173,6 @@ img {
   }
 }
 
-/* "Why LPV" card overlapping the hero */
 .overlap-card {
   position: relative;
   z-index: 5;
@@ -634,31 +633,58 @@ img {
   z-index: 1040;
   display: flex;
   align-items: center;
+  flex-direction: row-reverse;
   gap: .5rem;
-  background: #25d366;
-  color: #fff !important;
-  padding: .65rem 1rem;
-  border-radius: 50rem;
-  font-weight: 600;
+  color: #111 !important;
   text-decoration: none;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
 }
 
 .wa-float i {
-  font-size: 1.4rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  font-size: 1.8rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+}
+
+.wa-float span {
+  padding: .5rem .75rem;
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
 }
 
 .wa-float:hover {
+  color: #111 !important;
+}
+
+.wa-float:hover i {
   background: #1ebe5b;
 }
 
 @media (max-width: 575.98px) {
-  .wa-float span {
-    display: none;
+  .wa-float {
+    right: .75rem;
+    bottom: .75rem;
+    gap: .4rem;
   }
 
-  .wa-float {
-    padding: .8rem;
+  .wa-float i {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+
+  .wa-float span {
+    font-size: .875rem;
   }
 }
 
