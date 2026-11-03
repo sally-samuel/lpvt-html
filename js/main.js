@@ -3,6 +3,12 @@
   "use strict";
   var cfg = window.LPVT_CONFIG || {};
 
+  function blogTagUrl(tag) {
+    var params = new URLSearchParams();
+    params.set("tag", tag);
+    return "/blog/?" + params.toString();
+  }
+
   /* ---- 1. Lazy-load section backgrounds (saves bandwidth) ---- */
   function loadBg(el) {
     var src = el.getAttribute("data-bg");
@@ -94,6 +100,12 @@
     var tag = params.get("tag");
     var page = Math.max(1, parseInt(params.get("page"), 10) || 1);
     var cards = Array.prototype.slice.call(grid.querySelectorAll("[data-article]"));
+    cards.forEach(function (card) {
+      card.querySelectorAll(".bc-tag").forEach(function (link) {
+        var linkTag = new URL(link.href, location.href).searchParams.get("tag");
+        if (linkTag) link.href = blogTagUrl(linkTag);
+      });
+    });
     var shown = cards.filter(function (card) {
       if (!tag) return true;
       return (card.getAttribute("data-tags") || "").split("|").map(function (t) { return t.toLowerCase(); }).indexOf(tag.toLowerCase()) > -1;
@@ -189,7 +201,8 @@
         var link = tag.cloneNode(true);
         link.className = "post-tag";
         var tagUrl = new URL(link.getAttribute("href"), window.location.href);
-        if (tagUrl.pathname.indexOf("/blog/") > -1) link.href = "../../blog/" + tagUrl.search;
+        var tagName = tagUrl.searchParams.get("tag");
+        if (tagName) link.href = blogTagUrl(tagName);
         tagList.appendChild(link);
       });
       headingInner.appendChild(tagList);
