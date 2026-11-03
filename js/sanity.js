@@ -15,6 +15,12 @@
   function qs(name) { return new URLSearchParams(location.search).get(name); }
   function fmtDate(d) { try { return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }); } catch (e) { return ""; } }
   function img(url, w) { return url && url.indexOf("cdn.sanity.io") > -1 ? url + (url.indexOf("?") > -1 ? "&" : "?") + "w=" + (w || 900) + "&auto=format" : url; }
+  function blogUrl(section, params) {
+    var root = window.LPVT_SITE_ROOT || new URL("/", window.location.href);
+    var url = new URL("blog/" + (section || ""), root);
+    Object.keys(params || {}).forEach(function (key) { url.searchParams.set(key, params[key]); });
+    return url.pathname + url.search;
+  }
 
   function fetchQuery(groq, params) {
     var url = API + "?query=" + encodeURIComponent(groq);
@@ -109,7 +115,7 @@
     m('meta[name="description"]', desc); m('meta[property="og:title"]', title); m('meta[property="og:description"]', desc);
     if (image) m('meta[property="og:image"]', image);
   }
-  function tagPill(t) { return '<a class="tag-pill" href="/blog/?tag=' + encodeURIComponent(t) + '">' + esc(t) + "</a>"; }
+  function tagPill(t) { return '<a class="tag-pill" href="' + esc(blogUrl("", { tag: t })) + '">' + esc(t) + "</a>"; }
   function card(href, image, title, text, foot) {
     return '<div class="col-md-6 col-xl-4"><article class="blog-card bg-white"><a href="' + href + '" class="blog-thumb text-decoration-none" style="background-image:url(\'' + esc(img(image, 700) || assetUrl("images/logo.png")) + '\')" aria-label="' + esc(title) + '"></a>' +
       '<div class="p-4 d-flex flex-column flex-grow-1"><h2 class="h5 fw-bold"><a class="text-decoration-none" style="color:var(--dark-blue)" href="' + href + '">' + esc(title) + "</a></h2>" +
@@ -154,17 +160,17 @@
       var list = rows.filter(function (a) { return (!author || a.author === author) && (!tag || (a.tags || []).some(function (t) { return t.toLowerCase() === tag.toLowerCase(); })); });
       var pages = Math.max(1, Math.ceil(list.length / per)); page = Math.min(page, pages);
       grid.innerHTML = list.slice((page - 1) * per, page * per).map(function (a) {
-        var href = "/blog/post/?slug=" + encodeURIComponent(a.slug);
+        var href = blogUrl("post/", { slug: a.slug });
         var image = img(a.image || assetUrl("images/blog/" + a.slug + ".jpg"), 800) || assetUrl("images/logo.png");
         return '<article class="bc" data-article>' +
           '<a class="bc-img" href="' + href + '" style="background-image:url(\'' + esc(image) + '\')" aria-label="' + esc(a.name) + '"></a>' +
           '<div class="bc-body"><h2 class="bc-title"><a href="' + href + '">' + esc(a.name) + "</a></h2>" +
-          '<div class="bc-tags">' + (a.tags || []).map(function (t) { return '<a class="bc-tag" href="/blog/?tag=' + encodeURIComponent(t) + '">' + esc(t) + "</a>"; }).join("") + "</div>" +
+          '<div class="bc-tags">' + (a.tags || []).map(function (t) { return '<a class="bc-tag" href="' + esc(blogUrl("", { tag: t })) + '">' + esc(t) + "</a>"; }).join("") + "</div>" +
           '<p class="bc-text">' + esc(excerpt(a.content, 200)) + '</p><a class="bc-btn" href="' + href + '">Read more</a></div>' +
           '<div class="bc-foot">' + fmtDate(a.date) + (a.author ? " &bull; " + esc(a.author) : "") + "</div></article>";
       }).join("") || '<p class="text-center">No articles found.</p>';
       var info = document.getElementById("blogFilterInfo");
-      if (info) info.innerHTML = tag ? 'Showing articles tagged <strong>' + esc(tag) + '</strong> &middot; <a href="/blog/">Clear filter</a>' : "";
+      if (info) info.innerHTML = tag ? 'Showing articles tagged <strong>' + esc(tag) + '</strong> &middot; <a href="' + esc(blogUrl()) + '">Clear filter</a>' : "";
       var p = document.getElementById("blogPager"); if (p) pager(p, page, pages, tag);
     });
   };
@@ -177,7 +183,7 @@
     var list = (rows || []).filter(function (r) { return r.slug !== currentSlug; }).slice(0, 9);
     if (!list.length) return "";
     return '<aside class="post-side"><div class="post-latest"><h2>Latest Post</h2>' + list.map(function (r) {
-      var href = "/blog/post/?slug=" + encodeURIComponent(r.slug);
+      var href = blogUrl("post/", { slug: r.slug });
       return '<a class="post-latest-item" href="' + href + '">' +
         '<span class="post-latest-img" style="background-image:url(\'' + esc(postImage(r, 200)) + '\')"></span>' +
         '<span class="post-latest-text"><span class="post-latest-title">' + esc(r.name) + '</span><span class="post-latest-date">' + fmtDate(r.date) + "</span></span></a>";
@@ -188,7 +194,7 @@
     return Promise.all([fetchQuery(Q.post, { slug: slug }), fetchQuery(Q.articles).catch(function () { return []; })]).then(function (res) {
       var a = res[0]; if (!a) return notFound(box, "Article");
       setMeta(a.name, excerpt(a.content, 155), a.image);
-      var tags = (a.tags || []).map(function (t) { return '<a class="post-tag" href="/blog/?tag=' + encodeURIComponent(t) + '">' + esc(t) + "</a>"; }).join("");
+      var tags = (a.tags || []).map(function (t) { return '<a class="post-tag" href="' + esc(blogUrl("", { tag: t })) + '">' + esc(t) + "</a>"; }).join("");
       a.slug = a.slug || slug;
       box.style.paddingTop = "0"; box.style.minHeight = "0";
       box.innerHTML =
@@ -197,11 +203,11 @@
             (tags ? '<div class="post-tags">' + tags + "</div>" : "") +
             "<h1>" + esc(a.name) + "</h1>" +
             '<div class="post-meta"><span><i class="bi bi-calendar3"></i>' + fmtDate(a.date) + "</span>" +
-            (a.author ? '<a href="/blog/?author=' + encodeURIComponent(a.author) + '"><i class="bi bi-person"></i>' + esc(a.author) + "</a>" : "") + "</div>" +
+            (a.author ? '<a href="' + esc(blogUrl("", { author: a.author })) + '"><i class="bi bi-person"></i>' + esc(a.author) + "</a>" : "") + "</div>" +
           "</div></header>" +
         '<section class="post-wrap"><div class="post-grid">' +
           '<article class="post-main"><div class="post-body">' + portable(a.content) + '</div>' +
-          '<hr class="my-5"><a class="btn btn-green" href="/blog/">&larr; All articles</a></article>' +
+          '<hr class="my-5"><a class="btn btn-green" href="' + esc(blogUrl()) + '">&larr; All articles</a></article>' +
           latestPosts(res[1], a.slug) +
         "</div></section>";
     });

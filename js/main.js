@@ -3,10 +3,15 @@
   "use strict";
   var cfg = window.LPVT_CONFIG || {};
 
+  function blogUrl(query) {
+    var root = window.LPVT_SITE_ROOT || new URL("/", window.location.href);
+    var url = new URL("blog/", root);
+    if (query) url.search = new URLSearchParams(query).toString();
+    return url.pathname + url.search;
+  }
+
   function blogTagUrl(tag) {
-    var params = new URLSearchParams();
-    params.set("tag", tag);
-    return "/blog/?" + params.toString();
+    return blogUrl({ tag: tag });
   }
 
   /* ---- 1. Lazy-load section backgrounds (saves bandwidth) ---- */
@@ -115,7 +120,7 @@
     cards.forEach(function (card) { card.style.display = "none"; });
     shown.slice((page - 1) * PER_PAGE, page * PER_PAGE).forEach(function (card) { card.style.display = ""; });
     var info = document.getElementById("blogFilterInfo");
-    if (info && tag) info.innerHTML = 'Showing articles tagged <strong>' + esc(tag) + '</strong> &middot; <a href="/blog/">Clear filter</a>';
+    if (info && tag) info.innerHTML = 'Showing articles tagged <strong>' + esc(tag) + '</strong> &middot; <a href="' + blogUrl() + '">Clear filter</a>';
     var pager = document.getElementById("blogPager");
     if (pager && pages > 1) {
       function link(p, label, disabled, active) {
@@ -222,7 +227,7 @@
       postMeta.appendChild(date);
       if (parts[1]) {
         var author = document.createElement("a");
-        author.href = "../../blog/?author=" + encodeURIComponent(parts[1].trim());
+        author.href = blogUrl({ author: parts[1].trim() });
         author.innerHTML = '<i class="bi bi-person"></i>';
         author.appendChild(document.createTextNode(parts[1].trim()));
         postMeta.appendChild(author);
