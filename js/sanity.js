@@ -169,17 +169,41 @@
     });
   };
 
+  /* Blog article: full-width hero (tags, title, date/author) + article body + "Latest Post" sidebar */
+  function postImage(a, w) {
+    return img(a.image || assetUrl("images/blog/" + a.slug + ".jpg"), w) || assetUrl("images/blog_bg.jpg");
+  }
+  function latestPosts(rows, currentSlug) {
+    var list = (rows || []).filter(function (r) { return r.slug !== currentSlug; }).slice(0, 9);
+    if (!list.length) return "";
+    return '<aside class="post-side"><div class="post-latest"><h2>Latest Post</h2>' + list.map(function (r) {
+      var href = "/blog/post/?slug=" + encodeURIComponent(r.slug);
+      return '<a class="post-latest-item" href="' + href + '">' +
+        '<span class="post-latest-img" style="background-image:url(\'' + esc(postImage(r, 200)) + '\')"></span>' +
+        '<span class="post-latest-text"><span class="post-latest-title">' + esc(r.name) + '</span><span class="post-latest-date">' + fmtDate(r.date) + "</span></span></a>";
+    }).join("") + "</div></aside>";
+  }
   R.post = function (box) {
     var slug = qs("slug"); if (!slug) return notFound(box, "Article");
-    return fetchQuery(Q.post, { slug: slug }).then(function (a) {
-      if (!a) return notFound(box, "Article");
+    return Promise.all([fetchQuery(Q.post, { slug: slug }), fetchQuery(Q.articles).catch(function () { return []; })]).then(function (res) {
+      var a = res[0]; if (!a) return notFound(box, "Article");
       setMeta(a.name, excerpt(a.content, 155), a.image);
-      box.innerHTML = '<article class="mx-auto" style="max-width:820px">' +
-        '<div class="mb-3">' + (a.tags || []).map(tagPill).join("") + "</div>" +
-        '<h1 class="fw-bold" style="color:var(--dark-blue)">' + esc(a.name) + "</h1>" +
-        '<p class="text-muted">' + fmtDate(a.date) + (a.author ? ' &middot; <a href="/blog/?author=' + encodeURIComponent(a.author) + '">' + esc(a.author) + "</a>" : "") + "</p>" +
-        (a.image ? '<img class="img-fluid rounded mb-4 w-100" src="' + esc(img(a.image, 1400)) + '" alt="' + esc(a.name) + '">' : "") +
-        '<div class="post-body">' + portable(a.content) + '</div><hr class="my-5"><a class="btn btn-green" href="/blog/">&larr; All articles</a></article>';
+      var tags = (a.tags || []).map(function (t) { return '<a class="post-tag" href="/blog/?tag=' + encodeURIComponent(t) + '">' + esc(t) + "</a>"; }).join("");
+      a.slug = a.slug || slug;
+      box.style.paddingTop = "0"; box.style.minHeight = "0";
+      box.innerHTML =
+        '<header class="post-hero" style="background-image:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.62)),url(\'' + esc(postImage(a, 1800)) + '\')">' +
+          '<div class="post-hero-inner">' +
+            (tags ? '<div class="post-tags">' + tags + "</div>" : "") +
+            "<h1>" + esc(a.name) + "</h1>" +
+            '<div class="post-meta"><span><i class="bi bi-calendar3"></i>' + fmtDate(a.date) + "</span>" +
+            (a.author ? '<a href="/blog/?author=' + encodeURIComponent(a.author) + '"><i class="bi bi-person"></i>' + esc(a.author) + "</a>" : "") + "</div>" +
+          "</div></header>" +
+        '<section class="post-wrap"><div class="post-grid">' +
+          '<article class="post-main"><div class="post-body">' + portable(a.content) + '</div>' +
+          '<hr class="my-5"><a class="btn btn-green" href="/blog/">&larr; All articles</a></article>' +
+          latestPosts(res[1], a.slug) +
+        "</div></section>";
     });
   };
 
@@ -276,13 +300,19 @@
       draw();
     };
     draw();
+    return function (nextItems) {
+      items = nextItems;
+      pages = Math.max(1, Math.ceil(items.length / per));
+      page = Math.min(page, pages);
+      draw();
+    };
   }
   R["faq-cards"] = function (box) {
     var local = (window.LPVT_FAQS || []).map(function (f) { return { q: f.q, html: f.a ? "<p>" + esc(f.a) + "</p>" : "" }; });
-    if (local.length) faqCards(box, local);
+    var updateFaqCards = faqCards(box, local);
     return fetchQuery(Q.faqs).then(function (rows) {
       rows = (rows || []).filter(function (r) { return r.question; });
-      if (rows.length) faqCards(box, rows.map(function (r) { return { q: r.question, html: portable(r.answer) }; }));
+      if (rows.length) updateFaqCards(rows.map(function (r) { return { q: r.question, html: portable(r.answer) }; }));
     });
   };
 
