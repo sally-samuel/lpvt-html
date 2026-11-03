@@ -157,6 +157,150 @@
     });
   });
 
+  /* ---- 7. Match static blog articles to the shared article layout ---- */
+  function enhanceBlogArticle() {
+    var body = document.querySelector(".article-body");
+    var oldHero = document.querySelector("main > .page-hero.compact");
+    var oldSection = body && body.closest("section");
+    if (!body || !oldHero || !oldSection) return;
+
+    var title = oldHero.querySelector("h1");
+    var meta = oldHero.querySelector("p");
+    if (!title) return;
+
+    var path = window.location.pathname.split("/").filter(Boolean);
+    var blogIndex = path.indexOf("blog");
+    var slug = blogIndex > -1 ? path[blogIndex + 1] : "";
+    if (slug === "post" || slug === "index.html") slug = "";
+    slug = (slug || "").replace(/[^a-z0-9-]/gi, "");
+
+    var heading = document.createElement("header");
+    heading.className = "post-hero";
+    heading.style.backgroundImage = "linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.62)),url('../../images/" +
+      (slug ? "blog/" + slug : "blog_bg") + ".jpg')";
+    var headingInner = document.createElement("div");
+    headingInner.className = "post-hero-inner";
+
+    var tags = oldSection.querySelectorAll(".tag-pill");
+    if (tags.length) {
+      var tagList = document.createElement("div");
+      tagList.className = "post-tags";
+      tags.forEach(function (tag) {
+        var link = tag.cloneNode(true);
+        link.className = "post-tag";
+        var tagUrl = new URL(link.getAttribute("href"), window.location.href);
+        if (tagUrl.pathname.indexOf("/blog/") > -1) link.href = "../../blog/" + tagUrl.search;
+        tagList.appendChild(link);
+      });
+      headingInner.appendChild(tagList);
+    }
+
+    var headingTitle = document.createElement("h1");
+    headingTitle.textContent = title.textContent;
+    headingInner.appendChild(headingTitle);
+
+    if (meta) {
+      var parts = meta.textContent.split(/\s*[·•]\s*By\s*/);
+      var postMeta = document.createElement("div");
+      postMeta.className = "post-meta";
+      var date = document.createElement("span");
+      date.innerHTML = '<i class="bi bi-calendar3"></i>';
+      date.appendChild(document.createTextNode(parts[0].trim()));
+      postMeta.appendChild(date);
+      if (parts[1]) {
+        var author = document.createElement("a");
+        author.href = "../../blog/?author=" + encodeURIComponent(parts[1].trim());
+        author.innerHTML = '<i class="bi bi-person"></i>';
+        author.appendChild(document.createTextNode(parts[1].trim()));
+        postMeta.appendChild(author);
+      }
+      headingInner.appendChild(postMeta);
+    }
+    heading.appendChild(headingInner);
+
+    var postSection = document.createElement("section");
+    postSection.className = "post-wrap";
+    var postGrid = document.createElement("div");
+    postGrid.className = "post-grid";
+    var article = document.createElement("article");
+    article.className = "post-main";
+    body.classList.remove("article-body");
+    body.classList.add("post-body");
+    article.appendChild(body);
+
+    var relatedSection = oldSection.nextElementSibling;
+    var relatedHeading = relatedSection && relatedSection.querySelector("h2");
+    var isRelatedSection = relatedHeading && /more articles/i.test(relatedHeading.textContent);
+    if (isRelatedSection) {
+      var related = relatedSection.querySelectorAll(".card-soft");
+      if (related.length) {
+        var aside = document.createElement("aside");
+        aside.className = "post-side";
+        var latest = document.createElement("div");
+        latest.className = "post-latest";
+        var latestTitle = document.createElement("h2");
+        latestTitle.textContent = "Latest Post";
+        latest.appendChild(latestTitle);
+        related.forEach(function (card) {
+          var link = card.querySelector("h3 a");
+          if (!link) return;
+          var item = document.createElement("a");
+          item.className = "post-latest-item";
+          var url = new URL(link.getAttribute("href"), window.location.href);
+          var segments = url.pathname.split("/").filter(Boolean);
+          var relatedBlogIndex = segments.indexOf("blog");
+          var imageSlug = relatedBlogIndex > -1 ? segments[relatedBlogIndex + 1] : "";
+          if (imageSlug === "post") imageSlug = url.searchParams.get("slug") || "";
+          imageSlug = (imageSlug || "").replace(/\.jpg$/i, "").replace(/[^a-z0-9-]/gi, "");
+          item.href = imageSlug ? "../../blog/" + imageSlug + "/" : link.getAttribute("href");
+
+          var image = document.createElement("span");
+          image.className = "post-latest-img";
+          if (imageSlug) {
+            image.style.backgroundImage = "url('../../images/blog/" + imageSlug + ".jpg')";
+          }
+          var text = document.createElement("span");
+          text.className = "post-latest-text";
+          var itemTitle = document.createElement("span");
+          itemTitle.className = "post-latest-title";
+          itemTitle.textContent = link.textContent;
+          text.appendChild(itemTitle);
+          var itemDate = card.querySelector("p");
+          if (itemDate) {
+            var dateText = document.createElement("span");
+            dateText.className = "post-latest-date";
+            dateText.textContent = itemDate.textContent;
+            text.appendChild(dateText);
+          }
+          item.appendChild(image);
+          item.appendChild(text);
+          latest.appendChild(item);
+        });
+        aside.appendChild(latest);
+        postGrid.appendChild(article);
+        postGrid.appendChild(aside);
+      } else {
+        postGrid.appendChild(article);
+      }
+      relatedSection.remove();
+    } else {
+      postGrid.appendChild(article);
+    }
+
+    var rule = document.createElement("hr");
+    rule.className = "my-5";
+    article.appendChild(rule);
+    var back = document.createElement("a");
+    back.className = "btn btn-green";
+    back.href = "../index.html";
+    back.innerHTML = "&larr; Back to all articles";
+    article.appendChild(back);
+    postSection.appendChild(postGrid);
+
+    oldHero.replaceWith(heading);
+    oldSection.replaceWith(postSection);
+  }
+  enhanceBlogArticle();
 
   /* ---- 8. Nav: "Products" link goes to /products/ on desktop (submenu opens on hover) ---- */
   var wide = window.matchMedia("(min-width: 992px)");
