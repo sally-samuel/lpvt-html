@@ -25,6 +25,7 @@
   }
 
   function setActiveNavigation() {
+    setupProductNavigation();
     var path = window.location.pathname.replace(/index\.html$/, "");
     var links = document.querySelectorAll(".lp-nav a[href]");
     links.forEach(function (link) {
@@ -33,7 +34,39 @@
       if (path === href || (href !== "/" && path.indexOf(href) === 0)) {
         link.classList.add("active");
         var dropdown = link.closest(".dropdown");
-        if (dropdown) dropdown.querySelector(".dropdown-toggle").classList.add("active");
+        var toggle = dropdown && dropdown.querySelector(".dropdown-toggle");
+        if (toggle) toggle.classList.add("active");
+      }
+    });
+  }
+
+  function setupProductNavigation() {
+    document.querySelectorAll(".lp-nav .dropdown").forEach(function (dropdown) {
+      var link = dropdown.querySelector(".product-link, .dropdown-toggle");
+      if (!link || link.textContent.trim() !== "Products") return;
+
+      link.href = "/products/";
+      link.classList.remove("dropdown-toggle");
+      link.classList.add("product-link");
+      link.removeAttribute("data-bs-toggle");
+      link.removeAttribute("aria-expanded");
+      link.removeAttribute("role");
+      dropdown.classList.add("product-dropdown-item");
+
+      dropdown.querySelectorAll(".dropdown-menu .dropdown-item").forEach(function (item) {
+        var slug = item.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        if (slug) item.href = "/products/" + slug + "/";
+      });
+
+      if (!dropdown.querySelector(".product-menu-toggle")) {
+        var toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "nav-link dropdown-toggle product-menu-toggle d-lg-none";
+        toggle.setAttribute("data-bs-toggle", "dropdown");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Toggle products menu");
+        toggle.innerHTML = '<span class="visually-hidden">Toggle products menu</span>';
+        link.insertAdjacentElement("afterend", toggle);
       }
     });
   }

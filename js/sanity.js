@@ -326,14 +326,19 @@
 
   /* ---------- nav: Products dropdown from Sanity ---------- */
   function navProducts() {
-    var toggles = document.querySelectorAll(".lp-nav .dropdown-toggle");
-    var menu = null;
-    toggles.forEach(function (t) { if (/^\s*Products\s*$/.test(t.textContent)) menu = t.parentNode.querySelector(".dropdown-menu"); });
-    if (!menu) return;
-    fetchQuery('*[_type == "products"] | order(_createdAt desc){title, "slug": slug.current}').then(function (rows) {
-      if (!rows || !rows.length) return;
-      menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="/products/">All Products</a></li>' + rows.map(function (r) { return '<li><a class="dropdown-item" href="/products/' + encodeURIComponent(r.slug) + '/">' + esc(r.title) + "</a></li>"; }).join("");
-    }).catch(function () {});
+    Promise.resolve(window.LPVT_COMPONENTS_READY).then(function () {
+      var menu = null;
+      document.querySelectorAll(".lp-nav .product-link").forEach(function (link) {
+        if (/^\s*Products\s*$/.test(link.textContent)) menu = link.parentNode.querySelector(".dropdown-menu");
+      });
+      if (!menu) return;
+      return fetchQuery('*[_type == "products"] | order(_createdAt desc){title, "slug": slug.current}').then(function (rows) {
+        if (!rows || !rows.length) return;
+        menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="/products/">All Products</a></li>' + rows.map(function (r) { return '<li><a class="dropdown-item" href="/products/' + encodeURIComponent(r.slug) + '/">' + esc(r.title) + "</a></li>"; }).join("");
+      });
+    }).catch(function (error) {
+      console.error("Unable to load product navigation:", error);
+    });
   }
 
   /* ---------- boot ---------- */
