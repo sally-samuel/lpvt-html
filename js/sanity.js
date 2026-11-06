@@ -330,9 +330,10 @@
     var menu = null;
     toggles.forEach(function (t) { if (/^\s*Products\s*$/.test(t.textContent)) menu = t.parentNode.querySelector(".dropdown-menu"); });
     if (!menu) return;
+    var siteRoot = window.LPVT_SITE_ROOT || new URL("./", window.location.href);
     fetchQuery('*[_type == "products"] | order(_createdAt desc){title, "slug": slug.current}').then(function (rows) {
       if (!rows || !rows.length) return;
-      menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="/products/">All Products</a></li>' + rows.map(function (r) { return '<li><a class="dropdown-item" href="/products/' + encodeURIComponent(r.slug) + '.html">' + esc(r.title) + "</a></li>"; }).join("");
+      menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="' + esc(new URL("products/", siteRoot).href) + '">All Products</a></li>' + rows.map(function (r) { return '<li><a class="dropdown-item" href="' + esc(new URL("products/" + encodeURIComponent(r.slug) + ".html", siteRoot).href) + '">' + esc(r.title) + "</a></li>"; }).join("");
     }).catch(function () {});
   }
 
