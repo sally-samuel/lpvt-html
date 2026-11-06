@@ -32,7 +32,9 @@
     var path = window.location.pathname.replace(/index\.html$/, "");
     var links = document.querySelectorAll(".lp-nav a[href]");
     links.forEach(function (link) {
-      var href = new URL(link.href, window.location.href).pathname;
+      var rawHref = link.getAttribute("href");
+      if (!rawHref || rawHref === "#") return;
+      var href = new URL(link.href, window.location.href).pathname.replace(/index\.html$/, "");
       if (path === href || (href !== "/" && path.indexOf(href) === 0)) {
         link.classList.add("active");
         var dropdown = link.closest(".dropdown");
