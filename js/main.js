@@ -323,8 +323,7 @@
   /* ---- 8. Nav: "Products" link goes to /products/ on desktop (submenu opens on hover) ---- */
   var wide = window.matchMedia("(min-width: 992px)");
   var navLinks = Array.prototype.filter.call(document.querySelectorAll(".lp-nav .dropdown-toggle"), function (t) {
-    var h = t.getAttribute("href");
-    return h && h !== "#" && !/^\s*Products\s*$/.test(t.textContent);
+    var h = t.getAttribute("href"); return h && h !== "#";
   });
   function navMode() {
     navLinks.forEach(function (t) {
