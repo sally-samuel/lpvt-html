@@ -79,19 +79,29 @@ img {
 }
 
 .lp-nav .dropdown-menu {
+  --bs-dropdown-bg: #fff;
+  --bs-dropdown-link-color: var(--dark-blue);
+  --bs-dropdown-link-hover-bg: var(--light-green);
+  --bs-dropdown-link-hover-color: var(--dark-blue);
+  min-width: 13rem;
+  margin-top: 0;
   border: 0;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
   padding: 0;
   overflow: hidden;
+  z-index: 1040;
 }
 
 .lp-nav .dropdown-item {
+  display: block;
   padding: .6rem 1.25rem;
   font-size: .92rem;
   color: var(--dark-blue);
+  white-space: normal;
 }
 
+.lp-nav .dropdown-item:focus,
 .lp-nav .dropdown-item:hover,
 .lp-nav .dropdown-item.active {
   background: var(--green);
@@ -99,9 +109,13 @@ img {
 }
 
 @media (min-width: 992px) {
-  .lp-nav .dropdown:hover>.dropdown-menu {
+  .lp-nav .dropdown:hover>.dropdown-menu,
+  .lp-nav .dropdown:focus-within>.dropdown-menu {
     display: block;
-    margin-top: 0;
+  }
+
+  .lp-nav .dropdown-menu .dropdown-item {
+    white-space: nowrap;
   }
 }
 
@@ -1474,14 +1488,6 @@ img {
 
   .logistics-cta {
     margin-top: 2.5rem;
-  }
-}
-
-/* ===== Nav: open dropdowns on hover (desktop) ===== */
-@media (min-width: 992px) {
-  .lp-nav .dropdown:hover>.dropdown-menu {
-    display: block;
-    margin-top: 0;
   }
 }
 
