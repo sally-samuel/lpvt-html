@@ -96,10 +96,12 @@
   window.LPVT_SANITY = { query: fetchQuery, queries: Q, portable: portable };
 
   /* ---------- shared bits ---------- */
-  function accordion(id, items) {
+  function accordion(id, items, openCount) {
+    openCount = openCount || 1;
     return '<div class="accordion" id="' + id + '">' + items.map(function (it, i) {
-      return '<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button' + (i ? " collapsed" : "") + '" type="button" data-bs-toggle="collapse" data-bs-target="#' + id + "-" + i + '">' + esc(it.title) + '</button></h3>' +
-        '<div id="' + id + "-" + i + '" class="accordion-collapse collapse' + (i ? "" : " show") + '" data-bs-parent="#' + id + '"><div class="accordion-body">' + it.html + "</div></div></div>";
+      var expanded = i < openCount;
+      return '<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button' + (expanded ? "" : " collapsed") + '" type="button" data-bs-toggle="collapse" data-bs-target="#' + id + "-" + i + '" aria-expanded="' + expanded + '">' + esc(it.title) + '</button></h3>' +
+        '<div id="' + id + "-" + i + '" class="accordion-collapse collapse' + (expanded ? " show" : "") + '"' + (openCount === 1 ? ' data-bs-parent="#' + id + '"' : "") + '><div class="accordion-body">' + it.html + "</div></div></div>";
     }).join("") + "</div>";
   }
   function notFound(box, what) {
@@ -145,7 +147,7 @@
     return function (box) {
       return fetchQuery(Q[type]).then(function (rows) {
         if (!rows || !rows.length) return;
-        box.innerHTML = accordion(type + "S", rows.map(function (r) { return { title: r.title, html: portable(r.content) }; }));
+        box.innerHTML = accordion(type + "S", rows.map(function (r) { return { title: r.title, html: portable(r.content) }; }), 2);
       });
     };
   }
