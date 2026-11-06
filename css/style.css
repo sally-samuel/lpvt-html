@@ -504,6 +504,7 @@ img {
   overflow: visible;
   border-radius: 0;
   box-shadow: none;
+  align-items: start;
 }
 
 @media (min-width: 768px) {
