@@ -356,7 +356,13 @@
 
   /* ---------- boot ---------- */
   if (!S.projectId) return;
-  navProducts();
+  if (window.LPVT_COMPONENTS_READY) {
+    window.LPVT_COMPONENTS_READY.then(navProducts);
+  } else if (document.querySelector(".lp-nav")) {
+    navProducts();
+  } else {
+    window.addEventListener("lpvt:components-ready", navProducts, { once: true });
+  }
   document.querySelectorAll("[data-sanity]").forEach(function (box) {
     var fn = R[box.getAttribute("data-sanity")];
     if (fn) { Promise.resolve().then(function () { return fn(box); }).catch(function () { failed(box); }); }
