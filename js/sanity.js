@@ -331,10 +331,27 @@
     toggles.forEach(function (t) { if (/^\s*Products\s*$/.test(t.textContent)) menu = t.parentNode.querySelector(".dropdown-menu"); });
     if (!menu) return;
     var siteRoot = window.LPVT_SITE_ROOT || new URL("./", window.location.href);
+    var staticPages = {
+      "green-impact": true,
+      "panel-specification": true,
+      "warranty": true,
+      "solar-panels": true
+    };
     fetchQuery('*[_type == "products"] | order(_createdAt desc){title, "slug": slug.current}').then(function (rows) {
       if (!rows || !rows.length) return;
-      menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="' + esc(new URL("products/", siteRoot).href) + '">All Products</a></li>' + rows.map(function (r) { return '<li><a class="dropdown-item" href="' + esc(new URL("products/" + encodeURIComponent(r.slug) + ".html", siteRoot).href) + '">' + esc(r.title) + "</a></li>"; }).join("");
-    }).catch(function () {});
+      menu.innerHTML = '<li class="all-link"><a class="dropdown-item" href="' + esc(new URL("products/", siteRoot).href) + '">All Products</a></li>' + rows.filter(function (r) { return r && r.slug && r.title; }).map(function (r) {
+        var productUrl;
+        if (Object.prototype.hasOwnProperty.call(staticPages, r.slug)) {
+          productUrl = new URL("products/" + encodeURIComponent(r.slug) + ".html", siteRoot);
+        } else {
+          productUrl = new URL("products/detail.html", siteRoot);
+          productUrl.searchParams.set("slug", r.slug);
+        }
+        return '<li><a class="dropdown-item" href="' + esc(productUrl.href) + '">' + esc(r.title) + "</a></li>";
+      }).join("");
+    }).catch(function (error) {
+      console.error("Unable to load products for navigation.", error);
+    });
   }
 
   /* ---------- boot ---------- */
