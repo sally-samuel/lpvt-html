@@ -290,26 +290,29 @@
 
   /* ---------- FAQ cards (2 columns, first two open, Previous / Next) ---------- */
   function faqCards(box, items) {
-    var per = 10, pages = Math.max(1, Math.ceil(items.length / per)), page = 1, open = {};
+    function answered(list) {
+      return (list || []).filter(function (it) { return it && it.q && it.q.trim() && it.html && it.html.trim(); });
+    }
+    items = answered(items);
+    var per = 10, pages = Math.max(1, Math.ceil(items.length / per)), page = 1;
     function draw() {
       var start = (page - 1) * per, list = items.slice(start, start + per);
       var h = '<div class="faqc-grid">' + list.map(function (it, i) {
-        var on = open[start + i] === undefined ? i < 2 : open[start + i];
-        return '<div class="faqc"><button type="button" class="faqc-head' + (on ? " on" : "") + '" data-i="' + (start + i) + '"><span>' + esc(it.q) + '</span><i class="bi bi-chevron-' + (on ? "up" : "down") + '"></i></button>' +
-          (on && it.html ? '<div class="faqc-body">' + it.html + "</div>" : "") + "</div>";
+        return '<details class="faqc"' + (i < 2 ? " open" : "") + '><summary class="faqc-head"><span>' + esc(it.q) + '</span><i class="bi bi-chevron-down"></i></summary>' +
+          '<div class="faqc-body">' + it.html + "</div></details>";
       }).join("") + "</div>";
       h += '<div class="faqc-pager"><button type="button" class="faqc-nav" data-go="-1"' + (page === 1 ? " disabled" : "") + '>Previous</button><button type="button" class="faqc-nav" data-go="1"' + (page === pages ? " disabled" : "") + ">Next</button></div>";
       box.innerHTML = h;
+      box.querySelectorAll(".faqc-nav").forEach(function (button) {
+        button.addEventListener("click", function () {
+          page = Math.min(pages, Math.max(1, page + parseInt(button.getAttribute("data-go"), 10)));
+          draw();
+        });
+      });
     }
-    box.onclick = function (e) {
-      var t = e.target.closest("[data-i],[data-go]"); if (!t || !box.contains(t)) return;
-      if (t.hasAttribute("data-go")) { page = Math.min(pages, Math.max(1, page + parseInt(t.getAttribute("data-go"), 10))); open = {}; }
-      else { var i = parseInt(t.getAttribute("data-i"), 10), start = (page - 1) * per, cur = open[i] === undefined ? (i - start) < 2 : open[i]; open[i] = !cur; }
-      draw();
-    };
     draw();
     return function (nextItems) {
-      items = nextItems;
+      items = answered(nextItems);
       pages = Math.max(1, Math.ceil(items.length / per));
       page = Math.min(page, pages);
       draw();

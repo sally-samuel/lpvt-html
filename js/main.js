@@ -45,6 +45,46 @@
     });
   }
 
+  /* ---- Home page: reveal content as it enters the viewport ---- */
+  var homeMain = hero && hero.closest("main");
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (homeMain && !reduceMotion && "IntersectionObserver" in window) {
+    var revealGroups = [
+      { selector: ".hero-content > div", direction: "up" },
+      { selector: ".overlap-card .card", direction: "up" },
+      { selector: ".section .row > div", direction: "sides" },
+      { selector: ".protect-hero .container", direction: "up" },
+      { selector: ".protect-stats .counter-col", direction: "up" },
+      { selector: ".ready-wrap > *", direction: "sides" },
+      { selector: ".ready-grid > div", direction: "up" },
+      { selector: ".offer-head", direction: "up" },
+      { selector: ".offer-card", direction: "up" },
+      { selector: ".trusted-box", direction: "up" },
+      { selector: ".apart-text", direction: "left" },
+      { selector: ".apart-item", direction: "up" },
+      { selector: ".partner-inner", direction: "up" }
+    ];
+    var revealObserver = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: "0px 0px -100px 0px" });
+
+    revealGroups.forEach(function (group) {
+      homeMain.querySelectorAll(group.selector).forEach(function (el, index) {
+        var direction = group.direction === "sides"
+          ? (index % 2 ? "right" : "left")
+          : group.direction;
+        el.classList.add("home-motion", "home-motion--" + direction);
+        el.style.setProperty("--home-motion-delay", 50 + Math.min(index, 3) * 75 + "ms");
+        revealObserver.observe(el);
+      });
+    });
+  }
+
   /* ---- 3. Animated counters ---- */
   var counters = document.querySelectorAll(".counter");
   var c = cfg.counters || {};
