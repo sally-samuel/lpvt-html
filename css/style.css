@@ -56,13 +56,13 @@ img {
 /* ---------- Navbar ---------- */
 .lp-nav {
   background: var(--light-green);
-  padding: .4rem 0;
+  padding: .8rem 0;
   box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
   z-index: 1030;
 }
 
 .lp-nav .navbar-brand img {
-  height: 48px;
+  height: 32px;
   width: auto;
 }
 
