@@ -33,16 +33,14 @@
     var links = document.querySelectorAll(".lp-nav a[href]");
     links.forEach(function (link) {
       var rawHref = link.getAttribute("href");
-      if (!rawHref || rawHref === "#") {
-        link.classList.remove("active");
-        return;
-      }
+      if (!rawHref || rawHref === "#") return;
       var href = new URL(link.href, window.location.href).pathname.replace(/index\.html$/, "");
-      var isActive = path === href || (href !== "/" && path.indexOf(href) === 0);
-      link.classList.toggle("active", isActive);
-      var dropdown = link.closest(".dropdown");
-      var toggle = dropdown && dropdown.querySelector(".dropdown-toggle");
-      if (toggle && isActive) toggle.classList.add("active");
+      if (path === href || (href !== "/" && path.indexOf(href) === 0)) {
+        link.classList.add("active");
+        var dropdown = link.closest(".dropdown");
+        var toggle = dropdown && dropdown.querySelector(".dropdown-toggle");
+        if (toggle) toggle.classList.add("active");
+      }
     });
   }
 
