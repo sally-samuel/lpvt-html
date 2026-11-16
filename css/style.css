@@ -76,7 +76,10 @@ img {
   display: none;
 }
 
-.lp-nav .nav-link:hover,
+.lp-nav .nav-link:hover {
+  color: var(--dark-blue);
+}
+
 .lp-nav .nav-link.active,
 .lp-nav .show>.nav-link {
   color: var(--green);
