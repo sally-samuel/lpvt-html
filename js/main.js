@@ -48,6 +48,41 @@
   /* ---- Home page: reveal content as it enters the viewport ---- */
   var homeMain = hero && hero.closest("main");
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) {
+    var heroText = document.querySelectorAll(
+      ".hero-content h6, .hero-content h1, .hero-content .btn, " +
+      ".page-hero h1, .page-hero h4, .page-hero p, " +
+      ".fq-hero-inner h1, .fq-hero-inner h4, " +
+      ".pp-hero-inner h1, .pp-hero-inner h4"
+    );
+    heroText.forEach(function (el, index) {
+      el.classList.add("page-slide-up");
+      el.style.setProperty("--page-slide-up-delay", Math.min(index, 3) * 120 + "ms");
+    });
+
+    function animateProtectText(section) {
+      section.querySelectorAll("h2, p").forEach(function (el, index) {
+        el.classList.add("page-slide-up");
+        el.style.setProperty("--page-slide-up-delay", index * 140 + "ms");
+      });
+    }
+
+    var protectSections = document.querySelectorAll(".protect-hero");
+    if ("IntersectionObserver" in window) {
+      var protectObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateProtectText(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      protectSections.forEach(function (section) { protectObserver.observe(section); });
+    } else {
+      protectSections.forEach(animateProtectText);
+    }
+  }
+
   if (homeMain && !reduceMotion && "IntersectionObserver" in window) {
     var revealGroups = [
       { selector: ".hero-content > div", direction: "up" },
@@ -362,16 +397,16 @@
 
   /* ---- 8. Nav: "Products" link goes to /products/ on desktop (submenu opens on hover) ---- */
   var wide = window.matchMedia("(min-width: 992px)");
-  var navLinks = Array.prototype.filter.call(document.querySelectorAll(".lp-nav .dropdown-toggle"), function (t) {
-    var h = t.getAttribute("href"); return h && h !== "#";
-  });
   function navMode() {
-    navLinks.forEach(function (t) {
+    document.querySelectorAll(".lp-nav .dropdown-toggle").forEach(function (t) {
+      var h = t.getAttribute("href");
+      if (!h || h === "#") return;
       if (wide.matches) t.removeAttribute("data-bs-toggle");      // desktop: plain link, CSS hover opens the menu
       else t.setAttribute("data-bs-toggle", "dropdown");          // mobile: tap opens the menu
     });
   }
   navMode();
+  window.addEventListener("lpvt:components-ready", navMode);
   if (wide.addEventListener) wide.addEventListener("change", navMode);
 
   /* ---- 7. Footer year ---- */
