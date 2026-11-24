@@ -115,6 +115,27 @@ img {
   color: #fff;
 }
 
+/* Compact Resources dropdown only */
+.lp-nav .navbar-nav > .dropdown:last-child > .dropdown-menu {
+  min-width: 84px;
+  width: 84px;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.lp-nav .navbar-nav > .dropdown:last-child .dropdown-item {
+  padding: .45rem .65rem;
+  font-size: .875rem;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Compact Products dropdown */
+.lp-nav .navbar-nav > .dropdown:nth-child(4) > .dropdown-menu {
+  min-width: 170px;
+  width: 170px;
+}
+
 @media (min-width: 992px) {
 
   .lp-nav .dropdown:hover>.dropdown-menu,
@@ -136,7 +157,7 @@ img {
   }
 }
 
-/* ---------- Home hero carousel ---------- */
+/* ===== HOME PAGE: Hero carousel ===== */
 .hero {
   position: relative;
   min-height: 115vh;
@@ -156,6 +177,20 @@ img {
   background-size: cover;
   background-position: center;
   background-color: var(--dark-blue);
+}
+
+.hero .carousel-item.active {
+  animation: lpvt-ken-burns 7s ease-out both;
+}
+
+@keyframes lpvt-ken-burns {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
 }
 
 .hero .carousel-item::after {
@@ -190,7 +225,7 @@ img {
 }
 
 .hero-content .btn {
-  transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+  transition: transform .20s ease, box-shadow .25s ease, background-color .20s ease;
   font-size: 1.05rem;
   padding: .4rem 1.2rem;
   margin-top: 2.2rem;
@@ -229,7 +264,7 @@ img {
   }
 }
 
-/* ---------- Page hero (inner pages) ---------- */
+/* ===== SHARED PAGES: Inner-page hero ===== */
 .page-hero {
   position: relative;
   color: #fff;
@@ -237,14 +272,14 @@ img {
   background-color: var(--dark-blue);
   background-size: cover;
   background-position: center;
-  padding: 9.5rem 0 5rem;
+  padding: 13rem 0 5rem;
 }
 
 .page-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, .45);
+  background: rgba(56, 55, 55, 0.45);
 }
 
 .page-hero .container {
@@ -252,14 +287,21 @@ img {
   z-index: 1;
 }
 
+.page-hero h1,
+.page-hero h4 {
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
 .page-hero h1 {
-  font-weight: 800;
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  line-height: 1.08;
 }
 
 .page-hero h4 {
-  font-weight: 400;
-  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-weight: 600;
+  font-size: clamp(.95rem, 2vw, 1.125rem);
+  line-height: 1.35;
   margin-top: .75rem;
 }
 
@@ -269,7 +311,7 @@ img {
   background: var(--dark-blue);
 }
 
-/* ---------- Generic sections ---------- */
+/* ===== SHARED: Section layout, headings, icons, and checklists ===== */
 .section {
   padding: 4.5rem 0;
 }
@@ -337,6 +379,7 @@ img {
   width: 100%;
 }
 
+/* ===== ABOUT PAGE: Built in Africa trust cards ===== */
 .about-trust {
   padding: 3rem 0;
   background: #fff;
@@ -444,6 +487,7 @@ img {
   }
 }
 
+/* ===== HOME PAGE: Solar schedules ===== */
 .solar-schedules {
   padding: 3.3rem 0 2.25rem;
   margin-bottom: 4rem;
@@ -601,7 +645,7 @@ img {
   }
 }
 
-/* Lazy-loaded section backgrounds */
+/* ===== SHARED: Lazy-loaded photo backgrounds ===== */
 .bg-photo {
   position: relative;
   color: #fff;
@@ -634,7 +678,7 @@ img {
   color: rgba(255, 255, 255, .85);
 }
 
-/* Protect the Planet + stats band */
+/* ===== HOME PAGE: Protect the Planet + stats band ===== */
 .protect-hero {
   position: relative;
   color: #fff;
@@ -734,7 +778,7 @@ img {
   }
 }
 
-/* Quote */
+/* ===== SHARED: Quote card ===== */
 .quote-card {
   max-width: 900px;
   margin: 0 auto;
@@ -746,7 +790,7 @@ img {
   font-style: italic;
 }
 
-/* Why-choose cards (What set us apart) */
+/* ===== SHARED: Why-choose cards ===== */
 .apart-card {
   background: #fff;
   border-radius: 20px;
@@ -759,7 +803,7 @@ img {
   background: #00d084;
 }
 
-/* CTA band */
+/* ===== SHARED: Call-to-action band ===== */
 .cta-band {
   background: linear-gradient(135deg, var(--deep-blue), var(--dark-blue));
   color: #fff;
@@ -777,7 +821,7 @@ img {
   opacity: .92;
 }
 
-/* Accordion (FAQ / terms / policy) */
+/* ===== FAQ, TERMS, PRIVACY: Accordion and legal-page layout ===== */
 .accordion {
   --bs-accordion-active-bg: var(--light-green);
   --bs-accordion-active-color: var(--dark-blue);
@@ -883,7 +927,7 @@ img {
   margin-top: .45rem;
 }
 
-/* Stat tiles (partners page) */
+/* ===== PARTNERS PAGE: Stat tiles ===== */
 .stat-tile {
   background: var(--light-green);
   border-radius: 16px;
@@ -898,7 +942,7 @@ img {
   color: var(--green);
 }
 
-/* ---------- Blog ---------- */
+/* ===== BLOG: Shared article typography and tags ===== */
 .blog-card {
   border: 0;
   border-radius: 16px;
@@ -955,7 +999,7 @@ img {
   margin-bottom: 1.25rem;
 }
 
-/* ---------- Forms ---------- */
+/* ===== SHARED: Form controls ===== */
 .form-card {
   background: #fff;
   border-radius: 20px;
@@ -973,7 +1017,7 @@ img {
   box-shadow: 0 0 0 .2rem rgba(67, 181, 73, .25);
 }
 
-/* ---------- Footer ---------- */
+/* ===== SHARED SITE CHROME: Legacy footer styles ===== */
 .lp-footer {
   background: var(--dark-blue);
   color: rgba(255, 255, 255, .85);
@@ -1034,7 +1078,7 @@ img {
   color: var(--green);
 }
 
-/* WhatsApp floating button */
+/* ===== SHARED SITE CHROME: WhatsApp floating button ===== */
 .wa-float {
   position: fixed;
   right: 1rem;
@@ -1081,10 +1125,160 @@ img {
 }
 
 @media (max-width: 575.98px) {
+  .protect-hero,
+  .protect.quality .protect-hero {
+    min-height: 553px;
+    display: flex;
+    align-items: center;
+    padding: 3.25rem 16px 2.5rem;
+  }
+
+  .protect-hero .container,
+  .protect.quality .protect-hero .container {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .protect-hero h2,
+  .protect.quality .protect-hero .container > h2 {
+    max-width: 330px;
+    margin: 0 auto 1.25rem;
+    font-size: clamp(2.75rem, 13vw, 3.25rem);
+    line-height: 1.02;
+  }
+
+  .protect-hero p,
+  .protect.quality .protect-hero p {
+    max-width: 335px;
+    font-size: clamp(.95rem, 4.2vw, 1.05rem);
+    line-height: 1.45;
+  }
+
+  .page-hero,
+  .page-hero.compact {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 20px 3.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 9vw, 2.25rem);
+  }
+
+  .page-hero h4 {
+    max-width: 320px;
+    margin: .75rem auto 0;
+    font-size: clamp(.95rem, 4.5vw, 1.1rem);
+  }
+
+  .who {
+    padding: 2.5rem 0 3rem;
+  }
+
+  .who-wrap {
+    gap: 1.75rem;
+    margin-top: 0;
+    margin-bottom: 3.5rem;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .who-text h6 {
+    font-size: .75rem;
+    line-height: 1.35;
+  }
+
+  .who-text h2 {
+    font-size: clamp(1.75rem, 8vw, 2rem);
+    line-height: 1.12;
+    margin: .75rem 0 1rem;
+  }
+
+  .who-text p,
+  .who-block p {
+    font-size: .95rem;
+  }
+
+  .lp-nav {
+    padding: .65rem 0;
+  }
+
+  .lp-nav .navbar-brand img {
+    height: 28px;
+  }
+
+  .hero {
+    min-height: 620px;
+  }
+
+  .hero-content {
+    min-height: 620px;
+    align-items: center;
+    padding: 7.5rem 1rem 7.5rem;
+  }
+
+  .hero-content h6 {
+    max-width: 280px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: .72rem;
+  }
+
+  .hero-content h1 {
+    max-width: 280px;
+    margin: .85rem auto 0;
+    font-size: clamp(2rem, 10vw, 2.35rem);
+    line-height: 1.08;
+  }
+
+  .hero-content .d-flex {
+    align-items: center;
+  }
+
+  .hero-content .btn {
+    width: min(220px, 82vw);
+    margin-top: 1.25rem;
+  }
+
+  .hero-content .d-flex .btn + .btn {
+    margin-top: 0;
+  }
+
+  .overlap-card {
+    margin-top: -5.25rem;
+    margin-right: 0;
+  }
+
+  .overlap-card .container {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .overlap-card .card {
+    border-radius: 18px;
+  }
+
+  .overlap-card .card-body {
+    padding: 1.5rem !important;
+  }
+
+  .overlap-card h2 {
+    max-width: 220px;
+    margin-bottom: 1.5rem;
+    line-height: 1.08;
+  }
+
+  .overlap-card p {
+    line-height: 1.7;
+  }
+
   .wa-float {
     right: .75rem;
     bottom: .75rem;
     gap: .4rem;
+    flex-direction: row-reverse;
   }
 
   .wa-float i {
@@ -1097,7 +1291,7 @@ img {
   }
 }
 
-/* ===== Home sections: Ready / Offer / Trusted / Apart / Partner ===== */
+/* ===== HOME PAGE: Ready, offer, trusted, apart, and partner sections ===== */
 .tile {
   width: 48px;
   height: 48px;
@@ -1392,7 +1586,7 @@ img {
   margin: 1.1rem 0 0;
 }
 
-/* ===== Home: What Set Us Apart (the Partners page "logistics" version is untouched) ===== */
+/* ===== HOME PAGE: What Set Us Apart (partners logistics styles follow below) ===== */
 .apart:not(.logistics) {
   padding: 5rem 0 6rem;
 }
@@ -1432,6 +1626,18 @@ img {
 .apart-item .tile svg {
   width: 32px;
   height: 32px;
+}
+
+.apart.logistics .apart-item .tile {
+  width: 60px;
+  height: 60px;
+}
+
+.apart.logistics .apart-item .tile svg,
+.apart.logistics .apart-item .tile i {
+  width: 36px;
+  height: 36px;
+  font-size: 2.25rem;
 }
 
 .apart:not(.logistics) .apart-item h6 {
@@ -1493,7 +1699,7 @@ img {
 }
 
 .partner p {
-  font-size: .9rem;
+  font-size: 17px;
   line-height: 1.5;
   margin: 2.4rem 0 0;
 }
@@ -1547,6 +1753,14 @@ img {
     transform: none;
   }
 
+  .risk-card {
+    transition: none;
+  }
+
+  .risk-card:hover {
+    transform: none;
+  }
+
   .home-motion {
     opacity: 1;
     transform: none;
@@ -1559,6 +1773,12 @@ img {
     transform: none;
   }
 
+  .hero .carousel-item.active,
+  .faqc.faq-card-in,
+  .faqc[open]>.faqc-body {
+    animation: none;
+  }
+
   .hero-content .btn,
   .offer-card,
   .apart-item,
@@ -1566,7 +1786,7 @@ img {
   .apart-item .tile,
   .ready-grid .tile,
   .ready-grid>div {
-    transition-duration: .01ms;
+    transition-duration: .03ms;
   }
 
   .hero-content .btn:hover,
@@ -1633,7 +1853,7 @@ img {
   }
 }
 
-/* ===== Footer ===== */
+/* ===== SHARED SITE CHROME: Current footer ===== */
 .site-footer {
   background: #e1f5ec;
   padding: 2.8rem 0 2rem;
@@ -1791,9 +2011,10 @@ img {
   }
 }
 
-/* ===== Partners: Risks / After-sales / Forex cards ===== */
+/* ===== PARTNERS PAGE: Risks, after-sales, and forex cards ===== */
 .risks {
   padding: 3rem 30px 2.6rem;
+  margin-bottom: 2rem;
   border-bottom: 1px solid #d1d5db;
   background: #fff;
 }
@@ -1810,6 +2031,13 @@ img {
   background: #fff;
   padding: 2.5rem 1.6rem 2.4rem;
   text-align: center;
+  transition: transform .3s ease, box-shadow .3s ease;
+  margin-bottom: 3rem;
+}
+
+.risk-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .25);
 }
 
 .risk-icon {
@@ -1822,6 +2050,12 @@ img {
   align-items: center;
   justify-content: center;
   font-size: 1.9rem;
+}
+
+.risk-icon svg {
+  width: 34px;
+  height: 34px;
+  color: #fff;
 }
 
 .risk-card h3 {
@@ -1849,7 +2083,128 @@ img {
   }
 }
 
-/* Ready section feature icons: 60px tile with outline SVG icon */
+/* ===== PARTNERS PAGE: Reliable solar PV module supply ===== */
+.supply {
+  padding: 5rem 0;
+  background: #fff;
+}
+
+.supply-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, .815fr) minmax(0, 1fr);
+  gap: 5rem;
+  align-items: start;
+  padding: 0 32px;
+}
+
+.supply-media img {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.supply-body .section-title {
+  margin: 0;
+  color: var(--dark-blue);
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.supply-lead {
+  margin: .75rem 0 0;
+  color: var(--dark-blue);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.supply-sub {
+  margin: 1.5rem 0 0;
+  color: var(--dark-blue);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.supply-checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem 2rem;
+  margin-top: 1.25rem;
+}
+
+.supply-checks li {
+  margin: 0;
+  gap: .7rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.supply-checks li::before {
+  color: #0fcc7c;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  flex: none;
+}
+
+@media (max-width: 991.98px) {
+  .supply-wrap {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 20px;
+  }
+
+  .supply-media img {
+    height: 260px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .supply-checks {
+    grid-template-columns: 1fr;
+  }
+
+  .supply-body .section-title {
+    font-size: 1.9rem;
+  }
+}
+
+/* ===== SHARED: Scroll reveal animation ===== */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.16, 1, .3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js .reveal.reveal-left {
+  transform: translate3d(-2rem, 0, 0);
+}
+
+.js .reveal.reveal-right {
+  transform: translate3d(2rem, 0, 0);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .js .reveal,
+  .js .reveal.reveal-left,
+  .js .reveal.reveal-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ===== HOME PAGE: Ready section feature icons ===== */
 .ready-grid .tile {
   width: 60px;
   height: 60px;
@@ -1862,10 +2217,10 @@ img {
   height: 32px;
 }
 
-/* ===== Partners: Unmatched Quality (photo + stats band) ===== */
+/* ===== PARTNERS PAGE: Unmatched quality and stats ===== */
 .protect.quality .protect-hero {
-  min-height: 437px;
-  padding: 2rem 0 2rem;
+  min-height: 553px;
+  padding: 4.6rem 0 3rem;
 }
 
 .protect.quality .protect-hero::before {
@@ -1880,46 +2235,69 @@ img {
 
 .protect.quality .protect-hero .container>h2 {
   max-width: 640px;
-  font-size: clamp(1.9rem, 3.3vw, 2.85rem);
-  line-height: 1.04;
+  font-size: 60px;
+  line-height: 1;
   margin-bottom: .9rem;
 }
 
 .protect.quality .protect-hero p {
-  font-size: .875rem;
-  line-height: 1.45;
+  font-size: 17px;
+  line-height: 1.5;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .7);
 }
 
 .protect.quality .protect-stats .num {
   font-family: inherit;
-  font-size: 1.2rem;
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: .02em;
 }
 
 .protect.quality .protect-stats .label {
-  font-size: .88rem;
+  font-size: 18px;
+  font-weight: 500;
 }
 
-/* ===== Partners: Ready for Seamless Solar Logistics ===== */
+/* ===== PARTNERS PAGE: Seamless solar logistics ===== */
 .apart.logistics {
   padding: 4.5rem 0 3rem;
 }
 
 .apart.logistics .apart-wrap {
   max-width: none;
-  padding: 0 46px 0 22px;
-  gap: 4.5rem;
+  padding: 0 36px 0 32px;
+  gap: 3.3rem;
 }
 
 .apart.logistics .apart-text {
   flex: 0 0 33%;
 }
 
+.apart.logistics .apart-text h6 {
+  font-size: .95rem;
+}
+
+/* Heading sizes follow the original: 24/28 mobile, 32/32 tablet, 38/45 desktop */
 .apart.logistics .apart-text h2 {
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
-  line-height: 1.2;
+  margin-top: 1rem;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .apart.logistics .apart-text h2 {
+    font-size: 32px;
+    line-height: 32px;
+  }
+}
+
+@media (min-width: 992px) {
+  .apart.logistics .apart-text h2 {
+    font-size: 38px;
+    line-height: 45px;
+    text-align: left;
+  }
 }
 
 .apart.logistics .apart-cards {
@@ -1927,17 +2305,38 @@ img {
   align-items: stretch;
 }
 
+.apart.logistics .apart-item {
+  padding: 2.5rem 1.4rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 8px 10px -6px rgba(0, 0, 0, .1);
+}
+
 .apart.logistics .apart-item:nth-child(3) {
   align-self: center;
 }
 
+/* Centre each icon inside its tile exactly, whatever else sits in the tile */
+.apart.logistics .apart-item .tile {
+  position: relative;
+}
+
+.apart.logistics .apart-item .tile>svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: auto;
+}
+
 .apart.logistics .apart-item h6 {
-  font-size: 1.05rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 .apart.logistics .apart-item p {
-  font-size: .95rem;
+  font-size: 1rem;
   line-height: 1.5;
+  margin-top: 1.2rem;
 }
 
 .logistics-cta {
@@ -1949,9 +2348,21 @@ img {
   padding: .8rem 2rem;
   font-weight: 700;
   font-size: .95rem;
+  margin-top: 1.5rem;
+}
+
+/* Smaller variant of .btn-pill (top "Become A Partner" button on Partners page) */
+.btn-pill.btn-compact {
+  padding: .5rem 1.4rem;
+  font-size: 1rem;
 }
 
 @media (max-width: 991.98px) {
+  .apart.logistics .apart-wrap {
+    gap: 2rem;
+    padding: 0 20px;
+  }
+
   .apart.logistics .apart-text {
     flex: none;
   }
@@ -1971,7 +2382,7 @@ img {
   }
 }
 
-/* ===== Contact: map + "Get in touch" split ===== */
+/* ===== CONTACT PAGE: Map and contact-information split ===== */
 .contact-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1997,7 +2408,7 @@ img {
   display: flex;
   align-items: center;
   color: #fff;
-  padding: 3.2rem 3rem 3rem 4.8rem;
+  padding: 3.2rem 4rem 4rem 2.8rem;
 }
 
 .cs-inner {
@@ -2009,7 +2420,7 @@ img {
   color: #0fcc7c;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: .72rem;
+  font-size: 16px;
   letter-spacing: .02em;
   margin: 0 0 1rem;
 }
@@ -2017,14 +2428,14 @@ img {
 .cs-inner h2 {
   color: #fff;
   font-weight: 700;
-  font-size: clamp(1.3rem, 1.95vw, 1.7rem);
+  font-size:40px;
   line-height: 1.2;
   margin: 0 0 .9rem;
 }
 
 .cs-lead {
   color: #fff;
-  font-size: .78rem;
+  font-size: 16px;
   line-height: 1.6;
   margin: 0;
 }
@@ -2044,8 +2455,8 @@ img {
 }
 
 .cs-circ {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   flex: none;
   border-radius: 50%;
   background: #0fcc7c;
@@ -2053,19 +2464,19 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 35px;
 }
 
 .cs-item h3 {
   color: #fff;
-  font-size: .85rem;
+  font-size: 17px;
   font-weight: 700;
   margin: 0 0 .15rem;
 }
 
 .cs-item p {
   color: rgba(255, 255, 255, .62);
-  font-size: .75rem;
+  font-size: 16px;
   line-height: 1.75;
   margin: 0;
 }
@@ -2093,7 +2504,7 @@ img {
   }
 }
 
-/* ===== Product page (matches the original product layout) ===== */
+/* ===== PRODUCTS PAGE: Product layout and detail sections ===== */
 .pp-container {
   width: 90%;
   margin: 0 auto;
@@ -2209,7 +2620,7 @@ img {
   padding: 2.5rem 1.25rem;
   text-align: center;
   background: #fff;
-  transition: box-shadow .2s;
+  transition: box-shadow .4s;
 }
 
 .pp-card:hover {
@@ -2242,6 +2653,10 @@ img {
 
 .pp-card article p {
   margin: 0;
+}
+
+.pp[data-slug="solar-panels"] .pp-card .check-list li::before {
+  display: none;
 }
 
 .pp-desc {
@@ -2381,6 +2796,35 @@ img {
   align-items: start;
 }
 
+.faqc {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform .29s ease, box-shadow .29s ease;
+}
+
+.faqc.faq-card-in {
+  opacity: 0;
+  animation: lpvt-faq-card-in .65s cubic-bezier(.16, 1, .3, 1) both;
+  animation-delay: var(--faq-card-delay, 0ms);
+}
+
+.faqc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(18, 38, 58, .08);
+}
+
+@keyframes lpvt-faq-card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (min-width: 640px) {
   .faqc-grid {
     grid-template-columns: 1fr 1fr;
@@ -2404,7 +2848,7 @@ img {
   padding: 1.25rem;
   min-height: 64px;
   border-radius: 16px;
-  transition: background .3s;
+  transition: background .4s;
 }
 
 .faqc-head::-webkit-details-marker {
@@ -2421,7 +2865,7 @@ img {
   font-size: 1.4rem;
   color: #0fcc7c;
   flex: none;
-  transition: transform .3s, color .3s;
+  transition: transform .4s, color .4s;
 }
 
 .faqc[open]>.faqc-head i {
@@ -2434,6 +2878,22 @@ img {
   background: #e1f5ec;
   color: #4b5563;
   font-size: 1rem;
+}
+
+.faqc[open]>.faqc-body {
+  animation: lpvt-faq-open .35s ease-out both;
+}
+
+@keyframes lpvt-faq-open {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -.35rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .faqc-body p:last-child {
@@ -2464,7 +2924,7 @@ img {
   cursor: default;
 }
 
-/* ===== Contact: "Send us a message" + form card ===== */
+/* ===== CONTACT PAGE: Message form and contact card ===== */
 .cf {
   padding: 4.2rem 0 4rem;
   background: #fff;
@@ -2625,7 +3085,7 @@ img {
   background: #c8c8c8;
   color: #222;
   cursor: not-allowed;
-  transition: background .2s, color .2s;
+  transition: background .4s, color .4s;
 }
 
 .cf-card:valid .cf-btn {
@@ -2653,7 +3113,7 @@ img {
   }
 }
 
-/* ===== FAQ page ===== */
+/* ===== FAQ PAGE: Hero, find, contact, and FAQ list ===== */
 .fq-hero {
   display: flex;
   align-items: center;
@@ -2662,6 +3122,7 @@ img {
   min-height: 40vh;
   padding: 7rem 1rem 3rem;
   background: #0b2a2a center / cover no-repeat;
+  overflow: hidden;
 }
 
 @media (min-width: 992px) {
@@ -2684,11 +3145,16 @@ img {
   margin: 0;
 }
 
-.fq-hero h4 {
+.fq-hero h5 {
   color: #fff;
   font-weight: 700;
-  font-size: 1.125rem;
+  font-size: 18px;
   margin: .75rem 0 0;
+}
+
+.fq-hero-inner {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
@@ -2911,7 +3377,7 @@ img {
   }
 }
 
-/* ===== Blog list cards ===== */
+/* ===== BLOG PAGE: Blog list cards ===== */
 .bc-wrap {
   width: 95%;
   max-width: 1320px;
@@ -3029,7 +3495,7 @@ img {
   font-size: .8125rem;
 }
 
-/* ===== Blog article page: hero + body + "Latest Post" sidebar ===== */
+/* ===== BLOG ARTICLE PAGE: Hero, article body, and latest-post sidebar ===== */
 .post-hero {
   display: flex;
   align-items: center;
@@ -3197,7 +3663,7 @@ img {
   color: #000;
   font-size: 1rem;
   line-height: 1.5;
-  transition: color .2s;
+  transition: color .4s;
 }
 
 .post-latest-date {
@@ -3221,10 +3687,14 @@ img {
   }
 }
 
-/* ===== About: Who We Are ===== */
+/* ===== ABOUT PAGE: Who We Are ===== */
 .who {
   padding: 4.5rem 0 3.5rem;
   background: #fff;
+}
+
+.who .page-slide-up {
+  animation-duration: 1.2s;
 }
 
 .who-wrap {
@@ -3290,5 +3760,166 @@ img {
     grid-template-columns: 1fr;
     gap: 2rem;
     padding: 0 20px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .protect-hero,
+  .protect.quality .protect-hero {
+    min-height: 553px;
+    height: 553px;
+    display: flex;
+    align-items: center;
+    padding: 2.5rem 16px;
+  }
+
+  .protect-hero .container,
+  .protect.quality .protect-hero .container {
+    width: 100%;
+  }
+
+  .protect-hero h2,
+  .protect.quality .protect-hero .container > h2 {
+    max-width: 300px;
+    margin: 0 auto 1.35rem;
+    font-size: 32px !important;
+    line-height: 1.05 !important;
+  }
+
+  .protect-hero p,
+  .protect.quality .protect-hero p {
+    max-width: 300px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+/* ===== ALL FILES: Mobile section heading consistency ===== */
+@media (max-width: 575.98px) {
+  main h1,
+  main .page-hero h1,
+  main .post-hero h1,
+  main .pp-hero h1,
+  main .fq-hero h1,
+  main .hero-content h1 {
+    max-width: 340px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 32px !important;
+    line-height: 1.05 !important;
+  }
+
+  main h2,
+  main .section-title,
+  main .post-latest h2 {
+    max-width: 340px;
+    font-size: 30px !important;
+    line-height: 1.08 !important;
+  }
+
+  main .protect-hero h2,
+  main .trusted-box h2,
+  main .partner h2,
+  main .protect.quality .protect-hero .container > h2 {
+    max-width: 300px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 32px !important;
+  }
+
+  main p,
+  main .lead-text,
+  main .protect-hero p {
+    line-height: 1.55;
+  }
+}
+
+/* ===== ALL PAGES: Slower, smoother transitions ===== */
+*,
+*::before,
+*::after {
+  transition-duration: .60s;
+}
+
+.carousel-item,
+.carousel.fade .carousel-item,
+.carousel-fade .carousel-item,
+.accordion-collapse,
+.accordion-collapse.show,
+.accordion-button,
+.accordion-button::after,
+.faqc,
+.faqc-head,
+.faqc-head i,
+.faqc-body,
+.wa-float,
+.wa-float i,
+.btn,
+.home-motion,
+.reveal,
+.page-slide-up,
+.faq-card-in {
+  transition-duration: .9s;
+  animation-duration: 1.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ===== ALL PAGES: Consistent mobile heading scale ===== */
+@media (max-width: 575.98px) {
+  h1 {
+    font-size: clamp(1.9rem, 9vw, 2.25rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  h2,
+  .section-title,
+  .post-latest h2 {
+    font-size: clamp(1.65rem, 8vw, 2rem) !important;
+    line-height: 1.12 !important;
+  }
+
+  .hero-content h1,
+  .page-hero h1,
+  .post-hero h1,
+  .pp-hero h1,
+  .fq-hero h1 {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .protect-hero h2,
+  .trusted-box h2,
+  .partner h2,
+  .protect.quality .protect-hero .container > h2 {
+    font-size: clamp(2.35rem, 12vw, 2.75rem) !important;
+    line-height: 1.02 !important;
+  }
+
+  .protect-hero,
+  .protect.quality .protect-hero {
+    min-height: 553px;
+  }
+
+  .protect-hero h2,
+  .protect.quality .protect-hero .container > h2 {
+    max-width: 340px;
+  }
+
+  .protect-hero p,
+  .protect.quality .protect-hero p {
+    max-width: 350px;
+    font-size: 16px;
+    line-height: 1.42;
   }
 }

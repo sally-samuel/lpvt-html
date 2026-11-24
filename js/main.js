@@ -52,7 +52,7 @@
     var heroText = document.querySelectorAll(
       ".hero-content h6, .hero-content h1, .hero-content .btn, " +
       ".page-hero h1, .page-hero h4, .page-hero p, " +
-      ".fq-hero-inner h1, .fq-hero-inner h4, " +
+      ".fq-hero-inner h1, .fq-hero-inner h4, .fq-hero-inner h5, " +
       ".pp-hero-inner h1, .pp-hero-inner h4"
     );
     heroText.forEach(function (el, index) {
@@ -80,6 +80,30 @@
       protectSections.forEach(function (section) { protectObserver.observe(section); });
     } else {
       protectSections.forEach(animateProtectText);
+    }
+
+    var whoSections = document.querySelectorAll(".who");
+    function animateWhoSection(section) {
+      section.querySelectorAll(
+        ".who-text h6, .who-text h2, .who-text .who-lead, .who-text .who-block, .who-media"
+      ).forEach(function (el, index) {
+        el.classList.add("page-slide-up");
+        el.style.setProperty("--page-slide-up-delay", index * 120 + "ms");
+      });
+    }
+
+    if ("IntersectionObserver" in window) {
+      var whoObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateWhoSection(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      whoSections.forEach(function (section) { whoObserver.observe(section); });
+    } else {
+      whoSections.forEach(animateWhoSection);
     }
   }
 
@@ -117,6 +141,60 @@
         el.style.setProperty("--home-motion-delay", 50 + Math.min(index, 3) * 75 + "ms");
         revealObserver.observe(el);
       });
+    });
+  }
+
+  /* ---- Scroll reveal for product / inner pages: every section from the hero down ----
+   * Reuses the .home-motion classes in style.css. Content inside [data-sanity="product-page"]
+   * is rebuilt by sanity.js, so it is animated after that render ("lpvt:product-rendered"). */
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    var sectionGroups = [
+      { selector: ".pp-ds", direction: "up" },
+      { selector: ".pp-card", direction: "up" },
+      { selector: ".pp-desc-img", direction: "left" },
+      { selector: ".pp-desc-text", direction: "right" },
+      { selector: ".pp-feat", direction: "up" },
+      { selector: ".offer-head", direction: "up" },
+      { selector: ".offer-card", direction: "up" },
+      { selector: ".protect-stats .counter-col", direction: "up" },
+      { selector: ".apart-text", direction: "left" },
+      { selector: ".apart-item", direction: "up" },
+      { selector: ".pp-faq-head", direction: "up" },
+      { selector: ".fq-find-text", direction: "left" },
+      { selector: ".fq-find-img", direction: "right" },
+      { selector: ".fq-head", direction: "up" },
+      { selector: '[data-sanity="faq-cards"]', direction: "up" }
+    ];
+    var sectionObserver = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: "0px 0px -80px 0px" });
+
+    function revealSections(scope, skipSanityBox) {
+      sectionGroups.forEach(function (group) {
+        scope.querySelectorAll(group.selector).forEach(function (el, index) {
+          if (el.classList.contains("home-motion")) return;
+          if (skipSanityBox && el.closest('[data-sanity="product-page"]')) return;
+          el.classList.add("home-motion", "home-motion--" + group.direction);
+          el.style.setProperty("--home-motion-delay", 50 + Math.min(index, 4) * 90 + "ms");
+          sectionObserver.observe(el);
+        });
+      });
+    }
+    revealSections(document, true);
+
+    window.addEventListener("lpvt:product-rendered", function (e) {
+      var box = e.detail && e.detail.box;
+      if (!box) return;
+      box.querySelectorAll(".pp-hero-icon, .pp-hero-inner h1").forEach(function (el, index) {
+        el.classList.add("page-slide-up");
+        el.style.setProperty("--page-slide-up-delay", index * 120 + "ms");
+      });
+      revealSections(box, false);
     });
   }
 

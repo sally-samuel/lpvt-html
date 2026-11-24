@@ -264,14 +264,15 @@
 
   /* ---------- Product page (hero, datasheet, sub-products, description, features) ---------- */
   var DATASHEET = "https://drive.google.com/file/d/1pHjF3pxfr-FQ8QPHPbX-n1LHjY2Ls0HO/view?usp=sharing";
+  var GEAR_SVG = '<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" color="#fff" style="color:#fff" height="35px" width="35px" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-width="2" d="M6,9 C7.65685425,9 9,7.65685425 9,6 C9,4.34314575 7.65685425,3 6,3 C4.34314575,3 3,4.34314575 3,6 C3,7.65685425 4.34314575,9 6,9 Z M6,3 L6,0 M6,12 L6,9 M0,6 L3,6 M9,6 L12,6 M2,2 L4,4 M8,8 L10,10 M10,2 L8,4 M4,8 L2,10 M18,12 C19.6568542,12 21,10.6568542 21,9 C21,7.34314575 19.6568542,6 18,6 C16.3431458,6 15,7.34314575 15,9 C15,10.6568542 16.3431458,12 18,12 Z M18,6 L18,3 M18,15 L18,12 M12,9 L15,9 M21,9 L24,9 M14,5 L16,7 M20,11 L22,13 M22,5 L20,7 M16,11 L14,13 M9,21 C10.6568542,21 12,19.6568542 12,18 C12,16.3431458 10.6568542,15 9,15 C7.34314575,15 6,16.3431458 6,18 C6,19.6568542 7.34314575,21 9,21 Z M9,15 L9,12 M9,24 L9,21 M3,18 L6,18 M12,18 L15,18 M5,14 L7,16 M11,20 L13,22 M13,14 L11,16 M7,20 L5,22"></path></svg>';
   function ppHtml(d) {
     var im = d.image && (d.image.url || d.image); im = typeof im === "string" ? im : "";
     var hero = im ? img(im, 1920) : assetUrl("images/Product-Page-Cover.jpg");
     var cards = (d.sub_products || []).map(function (c) {
-      return '<div class="pp-card"><span class="pp-card-icon"><i class="bi bi-gear-wide-connected"></i></span><h6>' + esc(c.title) + "</h6><article>" + portable(c.description) + "</article></div>";
+      return '<div class="pp-card"><span class="pp-card-icon">' + GEAR_SVG + '</span><h6>' + esc(c.title) + "</h6><article>" + portable(c.description) + "</article></div>";
     }).join("");
     var feats = (d.features || []).map(function (f) { return '<div class="pp-feat"><i class="bi bi-check-circle-fill"></i><span>' + esc(f) + "</span></div>"; }).join("");
-    return '<section class="pp-hero" style="background-image:linear-gradient(rgba(0,23,23,.6),rgba(0,23,23,.6)),url(\'' + esc(hero) + '\')"><div class="pp-hero-inner"><span class="pp-hero-icon"><i class="bi bi-gear-wide-connected"></i></span><h1>' + esc(d.title) + "</h1></div></section>" +
+    return '<section class="pp-hero" style="background-image:linear-gradient(rgba(0,23,23,.6),rgba(0,23,23,.6)),url(\'' + esc(hero) + '\')"><div class="pp-hero-inner"><span class="pp-hero-icon">' + GEAR_SVG + '</span><h1>' + esc(d.title) + "</h1></div></section>" +
       '<div class="pp-ds"><a class="pp-btn" href="' + DATASHEET + '" target="_blank" rel="noopener">Datasheet</a></div>' +
       (cards ? '<section class="pp-list"><div class="pp-container"><div class="pp-cards">' + cards + "</div></div></section>" : "") +
       '<section class="pp-desc"><div class="pp-container"><div class="pp-desc-row">' +
@@ -303,6 +304,10 @@
       }).join("") + "</div>";
       h += '<div class="faqc-pager"><button type="button" class="faqc-nav" data-go="-1"' + (page === 1 ? " disabled" : "") + '>Previous</button><button type="button" class="faqc-nav" data-go="1"' + (page === pages ? " disabled" : "") + ">Next</button></div>";
       box.innerHTML = h;
+      box.querySelectorAll(".faqc").forEach(function (card, index) {
+        card.classList.add("faq-card-in");
+        card.style.setProperty("--faq-card-delay", Math.min(index, 9) * 60 + "ms");
+      });
       box.querySelectorAll(".faqc-nav").forEach(function (button) {
         button.addEventListener("click", function () {
           page = Math.min(pages, Math.max(1, page + parseInt(button.getAttribute("data-go"), 10)));
@@ -368,6 +373,10 @@
   }
   document.querySelectorAll("[data-sanity]").forEach(function (box) {
     var fn = R[box.getAttribute("data-sanity")];
-    if (fn) { Promise.resolve().then(function () { return fn(box); }).catch(function () { failed(box); }); }
+    if (fn) {
+      Promise.resolve().then(function () { return fn(box); }).catch(function () { failed(box); }).then(function () {
+        if (box.getAttribute("data-sanity") === "product-page") window.dispatchEvent(new CustomEvent("lpvt:product-rendered", { detail: { box: box } }));
+      });
+    }
   });
 })();
